@@ -10,3 +10,16 @@ plugins and features that allows us to create dynamic websites too.
   
 Read the [documentation](https://www.gatsbyjs.com/docs/) for more information.
 </p>
+
+## Setup Gatsby.js by Nginx
+First install node package manager (npm), then install nginx :
+
+```shell
+npm install nginx
+```
+
+After that use the following command to create a new project :
+
+```shell
+npx gatsby new "Project Name"
+```
