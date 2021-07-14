@@ -3,7 +3,7 @@ import {ThemeProvider} from 'styled-components'
 // Styles
 import {GlobalStyles, lightTheme, darkTheme} from 'styles/GlobalStyles'
 
-const index = ({children}) => {
+const Layout = ({children}) => {
     return (
         <ThemeProvider theme={darkTheme}>
             <GlobalStyles />
@@ -13,4 +13,4 @@ const index = ({children}) => {
     )
 }
 
-export default index;
+export default Layout;
