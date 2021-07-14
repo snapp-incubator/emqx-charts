@@ -16,7 +16,7 @@ export const darkTheme = {
         backgraound: colors.darkGray,
         menuBackground: colors.blueShade1,
         textDark: colors.blueShade3,
-        testMain: colors.blueShade2,
+        textMain: colors.blueShade2,
         textSecondary: colors.blueShade3
     },
 }
@@ -26,7 +26,7 @@ export const lightTheme = {
         backgraound: colors.white,
         menuBackground: colors.blueShade3,
         textDark: colors.blueShade1,
-        testMain: colors.blueShade2,
+        textMain: colors.blueShade2,
         textSecondary: colors.deepDarkGray
     },
 }
@@ -52,7 +52,7 @@ export const GlobalStyles = createGlobalStyle`
         font-style: normal;
     }
     body {
-        background: ${props => props.theme.colors.background};
+        background: ${props => props.theme.colors.backgraound};
         color: ${props => props.theme.colors.textSecondary};
         font-family: "Nunito Regular", Arial;
         margin: 0px;
@@ -64,7 +64,7 @@ export const GlobalStyles = createGlobalStyle`
         margin: 40px auto;
     }
     h1, h2, h3, h4, h5, h6 {
-        color: ${props => props.theme.colors.testMain};
+        color: ${props => props.theme.colors.textMain};
         font-family: "Nunito Black", Arial;
         transition: all 0.5s ease;
         letter-spacing: 1px;
