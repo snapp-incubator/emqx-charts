@@ -2,15 +2,17 @@ import * as React from 'react'
 import {Link} from 'gatsby'
 // Hooks
 import {useConfigQuery} from 'hooks/useConfigQuery'
+// Styles
+import {Wrapper, Logo} from './Header.styles'
 
 const Header = ({ siteTitle = `` }) => {
     const siteConfig = useConfigQuery()
     return (
-        <div>
+        <Wrapper>
             <Link to="/">
-                <img src={siteConfig.logo.publicURL} alt={siteTitle} />
+                <Logo src={siteConfig.logo.publicURL} alt={siteTitle} />
             </Link>
-        </div>
+        </Wrapper>
     )
 }
 
