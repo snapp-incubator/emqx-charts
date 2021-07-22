@@ -1,5 +1,7 @@
 import * as React from 'react'
 import {ThemeProvider} from 'styled-components'
+// Components
+import Header from 'components/Header'
 // Styles
 import {GlobalStyles, lightTheme, darkTheme} from 'styles/GlobalStyles'
 // Hooks
@@ -12,7 +14,7 @@ const Layout = ({children}) => {
     return (
         <ThemeProvider theme={darkTheme}>
             <GlobalStyles />
-            Layout Component 
+            <Header siteTitle={data.title} /> 
             {children}
         </ThemeProvider>
     )
