@@ -1,17 +1,19 @@
 import * as React from 'react'
 import { Link } from 'gatsby'
+// Styles
+import { Nav } from './Menu.styles'
 
 const Menu = ({ items }) => {
     return (
-        <div>
-            <ul>
-                {items.map((item) => (
+        <Nav>
+            {items.map((item) => (
+                <li key={items.id}>
                     <Link to={item.link} activeClassName="active">
-                        <li key={items.id}>{item.name}</li>
+                        {item.name}
                     </Link>
-                ))}
-            </ul>
-        </div>
+                </li>
+            ))}
+        </Nav>
     )
 }
 
