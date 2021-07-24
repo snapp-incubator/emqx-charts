@@ -7,7 +7,7 @@ const Menu = ({ items }) => {
     return (
         <Nav>
             {items.map((item) => (
-                <li key={items.id}>
+                <li key={item.id}>
                     <Link to={item.link} activeClassName="active">
                         {item.name}
                     </Link>
