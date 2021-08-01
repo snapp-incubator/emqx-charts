@@ -17,10 +17,10 @@ const Header = ({ siteTitle = `` }) => {
         <Wrapper>
             <Hamburger menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
             <MobileMenu menuOpen={menuOpen} items={siteConfig.menu} />
-            <Menu items={siteConfig.menu} />
             <Link to="/">
                 <Logo src={siteConfig.logo.publicURL} alt={siteTitle} />
             </Link>
+            <Menu items={siteConfig.menu} />
             <div>Theme Button</div>
         </Wrapper>
     )
