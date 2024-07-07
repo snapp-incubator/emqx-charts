@@ -1,0 +1,11 @@
+# operating-system
+.DS_Store
+
+# ides
+.idea/
+.vscode/
+
+# extra build files
+main
+*.exe
+
