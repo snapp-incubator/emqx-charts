@@ -82,6 +82,9 @@ spec:
             containerPort: 4370
           - name: genrpc-manual
             containerPort: 5369
+          env:
+          - name: EMQX_NODE__ROLE
+            value: "replicant"
           envFrom:
             - configMapRef:
                 name: {{ include "emqx.fullname" . }}-env
