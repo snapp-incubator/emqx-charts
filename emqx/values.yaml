@@ -37,6 +37,11 @@ emqx:
     # - name: mysql-probe
     #   image: alpine
     #   command: ["sh", "-c", "for i in $(seq 1 300); do nc -zvw1 mysql 3306 && exit 0 || sleep 3; done; exit 1"]
+  
+  # replicas is used for the number of core nodes
+  replicas: 3
+  # replicantsCount is used for the number of replicant nodes
+  replicantsCount: 3
 
   extraEnv:
     - name: HOME
