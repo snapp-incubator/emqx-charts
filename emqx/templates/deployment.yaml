@@ -112,16 +112,20 @@ spec:
           {{- toYaml .Values.extraVolumeMounts | nindent 10 }}
         {{- end }}
           readinessProbe:
-            httpGet:
-              path: /status
-              port: {{ splitList ":" ( .Values.emqxConfig.EMQX_DASHBOARD__LISTENERS__HTTP__BIND | default "18083" ) | last }}
+            exec:
+              command:
+                - /opt/emqx/bin/emqx
+                - ctl
+                - status
             initialDelaySeconds: 10
             periodSeconds: 5
             failureThreshold: 30
           livenessProbe:
-            httpGet:
-              path: /status
-              port: {{ splitList ":" ( .Values.emqxConfig.EMQX_DASHBOARD__LISTENERS__HTTP__BIND | default "18083" ) | last }}
+            exec:
+              command:
+                - /opt/emqx/bin/emqx
+                - ctl
+                - status
             initialDelaySeconds: 60
             periodSeconds: 30
             failureThreshold: 10
