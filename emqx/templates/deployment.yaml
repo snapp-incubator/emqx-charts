@@ -78,12 +78,6 @@ spec:
             containerPort: {{ splitList ":" ( .Values.emqxConfig.EMQX_LISTENERS__WS__DEFAULT__BIND | default "8083" ) | last }}
           - name: wss
             containerPort: {{ splitList ":" ( .Values.emqxConfig.EMQX_LISTENERS__WSS__DEFAULT__BIND | default "8084" ) | last }}
-          - name: dashboard
-            containerPort: {{ splitList ":" ( .Values.emqxConfig.EMQX_DASHBOARD__LISTENERS__HTTP__BIND | default "18083" ) | last }}
-          {{- if not (empty .Values.emqxConfig.EMQX_DASHBOARD__LISTENERS__HTTPS__BIND) }}
-          - name: dashboardtls
-            containerPort: {{ splitList ":" .Values.emqxConfig.EMQX_DASHBOARD__LISTENERS__HTTPS__BIND | last }}
-          {{- end }}
           - name: ekka
             containerPort: 4370
           - name: genrpc-manual
