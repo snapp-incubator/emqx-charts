@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "emqx.fullname" . }}
+  name: {{ include "emqx.fullname" . }}-deployment
   namespace: {{ .Release.Namespace }}
   labels:
     app.kubernetes.io/name: {{ include "emqx.name" . }}
@@ -10,40 +10,18 @@ metadata:
     app.kubernetes.io/managed-by: {{ .Release.Service }}
 spec:
   serviceName: {{ include "emqx.fullname" . }}-headless
-  podManagementPolicy: {{ .Values.podManagementPolicy }}
-  {{- if and .Values.persistence.enabled (not .Values.persistence.existingClaim) }}
-  volumeClaimTemplates:
-    - metadata:
-        name: emqx-data
-        namespace: {{ .Release.Namespace }}
-        labels:
-          app.kubernetes.io/name: {{ include "emqx.name" . }}
-          app.kubernetes.io/instance: {{ .Release.Name }}
-          app.kubernetes.io/managed-by: {{ .Release.Service }}
-      spec:
-        {{- if .Values.persistence.storageClassName }}
-        storageClassName: {{ .Values.persistence.storageClassName | quote }}
-        {{- end }}
-        accessModes:
-          - {{ .Values.persistence.accessMode | quote }}
-        resources:
-         requests:
-           storage: {{ .Values.persistence.size | quote }}
-  {{- end }}
-  updateStrategy:
-    type: RollingUpdate
-  {{- if .Values.minReadySeconds }}
-  minReadySeconds: {{ .Values.minReadySeconds }}
-  {{- end }}
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
+      app: {{ include "emqx.fullname" . }}
+      app.kubernetes.io/instance/type: replicant
       app.kubernetes.io/name: {{ include "emqx.name" . }}
       app.kubernetes.io/instance: {{ .Release.Name }}
   template:
     metadata:
       labels:
-        app: {{ include "emqx.name" . }}
+        app: {{ include "emqx.fullname" . }}
+        app.kubernetes.io/instance/type: replicant
         version: {{ .Chart.AppVersion }}
         app.kubernetes.io/name: {{ include "emqx.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
