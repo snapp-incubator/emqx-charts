@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "emqx.fullname" . }}-replicants-deployment
+  name: emqx-replicants-deployment
   labels:
     app: emqx
     app.kubernetes.io/instance: emqx-{{ .Release.Namespace }}
@@ -28,11 +28,7 @@ spec:
       {{- with .Values.podAnnotations }}
           {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- if .Values.recreatePods }}
-        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum | quote }}
-      {{- end }}
     spec:
-      serviceAccountName: {{ include "emqx.serviceAccountName" . }}
       volumes:
       {{- if .Values.ssl.enabled }}
       - name: ssl-cert
