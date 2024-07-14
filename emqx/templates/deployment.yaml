@@ -33,13 +33,23 @@ spec:
       {{- end }}
     spec:
       volumes:
-        - name: emqx-data
-          emptyDir: {}
+      {{- if .Values.emqx.ssl.enabled }}
+      - name: ssl-cert
+        secret:
+          secretName: {{ include "emqx.ssl.secretName" . }}
+      {{- end }}
+      - name: emqx-data
+        emptyDir: {}
+      {{- if .Values.emqx.emqxLicenseSecretName  }}
+      - name: emqx-license
+        secret:
+          secretName: {{ .Values.emqx.emqxLicenseSecretName }}
+      {{- end }}
     {{- if .Values.emqx.extraVolumes }}
-      {{- toYaml .Values.emqx.extraVolumes | nindent 8 }}
+      {{- toYaml .Values.emqx.extraVolumes | nindent 6 }}
     {{- end }}
       {{- if .Values.emqx.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.emqx.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- omit .Values.emqx.podSecurityContext "enabled" | toYaml | nindent 10 }}
       {{- end }}
       {{- if .Values.emqx.initContainers }}
       initContainers:
