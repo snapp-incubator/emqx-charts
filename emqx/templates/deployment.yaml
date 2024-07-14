@@ -33,18 +33,18 @@ spec:
       {{- end }}
     spec:
       volumes:
-      - name: emqx-data
-        emptyDir: {}
+        - name: emqx-data
+          emptyDir: {}
     {{- if .Values.emqx.extraVolumes }}
-      {{- toYaml .Values.emqx.extraVolumes | nindent 6 }}
+      {{- toYaml .Values.emqx.extraVolumes | nindent 8 }}
     {{- end }}
-    {{- if .Values.emqx.podSecurityContext.enabled }}
+      {{- if .Values.emqx.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.emqx.podSecurityContext "enabled" | toYaml | nindent 8 }}
-    {{- end }}
-    {{- if .Values.emqx.initContainers }}
+      {{- end }}
+      {{- if .Values.emqx.initContainers }}
       initContainers:
         {{- toYaml .Values.emqx.initContainers | nindent 8 }}
-    {{- end }}
+      {{- end }}
       {{- if .Values.emqx.image.pullSecrets }}
       imagePullSecrets:
         {{- range .Values.emqx.image.pullSecrets }}
