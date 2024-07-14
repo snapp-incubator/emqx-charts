@@ -25,55 +25,55 @@ spec:
         app.kubernetes.io/name: emqx
         app.kubernetes.io/db_type: replicant
       annotations:
-      {{- with .Values.podAnnotations }}
+      {{- with .Values.emqx.podAnnotations }}
           {{- toYaml . | nindent 8 }}
       {{- end }}
     spec:
       volumes:
-      {{- if .Values.ssl.enabled }}
+      {{- if .Values.emqx.ssl.enabled }}
       - name: ssl-cert
         secret:
           secretName: {{ include "emqx.ssl.secretName" . }}
       {{- end }}
       - name: emqx-data
         emptyDir: {}
-      {{- if .Values.emqxLicenseSecretName  }}
+      {{- if .Values.emqx.emqxLicenseSecretName  }}
       - name: emqx-license
         secret:
-          secretName: {{ .Values.emqxLicenseSecretName }}
+          secretName: {{ .Values.emqx.emqxLicenseSecretName }}
       {{- end }}
-    {{- if .Values.extraVolumes }}
-      {{- toYaml .Values.extraVolumes | nindent 6 }}
+    {{- if .Values.emqx.extraVolumes }}
+      {{- toYaml .Values.emqx.extraVolumes | nindent 6 }}
     {{- end }}
-      {{- if .Values.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- if .Values.emqx.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.emqx.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
-      {{- if .Values.initContainers }}
+      {{- if .Values.emqx.initContainers }}
       initContainers:
-        {{- toYaml .Values.initContainers | nindent 8 }}
+        {{- toYaml .Values.emqx.initContainers | nindent 8 }}
       {{- end }}
-      {{- if .Values.image.pullSecrets }}
+      {{- if .Values.emqx.image.pullSecrets }}
       imagePullSecrets:
-        {{- range .Values.image.pullSecrets }}
+        {{- range .Values.emqx.image.pullSecrets }}
         - name: {{ . }}
       {{- end }}
       {{- end }}
       containers:
         - name: emqx
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
-          {{- if .Values.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          image: "{{ .Values.emqx.image.repository }}:{{ .Values.emqx.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.emqx.image.pullPolicy }}
+          {{- if .Values.emqx.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.emqx.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
           ports:
           - name: mqtt
-            containerPort: {{ splitList ":" ( .Values.emqxConfig.EMQX_LISTENERS__TCP__DEFAULT__BIND | default "1883" ) | last }}
+            containerPort: {{ splitList ":" ( .Values.emqx.emqxConfig.EMQX_LISTENERS__TCP__DEFAULT__BIND | default "1883" ) | last }}
           - name: mqttssl
-            containerPort: {{ splitList ":" ( .Values.emqxConfig.EMQX_LISTENERS__SSL__DEFAULT__BIND | default "8883" ) | last }}
+            containerPort: {{ splitList ":" ( .Values.emqx.emqxConfig.EMQX_LISTENERS__SSL__DEFAULT__BIND | default "8883" ) | last }}
           - name: ws
-            containerPort: {{ splitList ":" ( .Values.emqxConfig.EMQX_LISTENERS__WS__DEFAULT__BIND | default "8083" ) | last }}
+            containerPort: {{ splitList ":" ( .Values.emqx.emqxConfig.EMQX_LISTENERS__WS__DEFAULT__BIND | default "8083" ) | last }}
           - name: wss
-            containerPort: {{ splitList ":" ( .Values.emqxConfig.EMQX_LISTENERS__WSS__DEFAULT__BIND | default "8084" ) | last }}
+            containerPort: {{ splitList ":" ( .Values.emqx.emqxConfig.EMQX_LISTENERS__WSS__DEFAULT__BIND | default "8084" ) | last }}
           - name: ekka
             containerPort: 4370
           - name: genrpc-manual
@@ -84,28 +84,28 @@ spec:
           envFrom:
             - configMapRef:
                 name: {{ include "emqx.fullname" . }}-env
-         {{- if .Values.envFromSecret }}
+         {{- if .Values.emqx.envFromSecret }}
             - secretRef:
-                name: {{ .Values.envFromSecret }}
+                name: {{ .Values.emqx.envFromSecret }}
          {{- end }}
           resources:
-{{ toYaml .Values.resources | indent 12 }}
+{{ toYaml .Values.emqx.resources | indent 12 }}
           volumeMounts:
           - name: emqx-data
             mountPath: "/opt/emqx/data"
-          {{- if .Values.ssl.enabled }}
+          {{- if .Values.emqx.ssl.enabled }}
           - name: ssl-cert
             mountPath: /tmp/ssl
             readOnly: true
           {{- end}}
-          {{ if .Values.emqxLicenseSecretName }}
+          {{ if .Values.emqx.emqxLicenseSecretName }}
           - name: emqx-license
             mountPath: "/opt/emqx/etc/emqx.lic"
             subPath: "emqx.lic"
             readOnly: true
           {{- end }}
-        {{- if .Values.extraVolumeMounts }}
-          {{- toYaml .Values.extraVolumeMounts | nindent 10 }}
+        {{- if .Values.emqx.extraVolumeMounts }}
+          {{- toYaml .Values.emqx.extraVolumeMounts | nindent 10 }}
         {{- end }}
           readinessProbe:
             exec:
@@ -125,19 +125,19 @@ spec:
             initialDelaySeconds: 60
             periodSeconds: 30
             failureThreshold: 10
-    {{- with .Values.nodeSelector }}
+    {{- with .Values.emqx.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-    {{- with .Values.affinity }}
+    {{- with .Values.emqx.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
     {{- end }}
-    {{- with .Values.tolerations }}
+    {{- with .Values.emqx.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
     {{- end }}
-    {{- with .Values.topologySpreadConstraints }}
+    {{- with .Values.emqx.topologySpreadConstraints }}
       topologySpreadConstraints:
         {{- range . }}
         - maxSkew: {{ .maxSkew }}
