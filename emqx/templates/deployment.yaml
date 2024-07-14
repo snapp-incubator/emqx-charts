@@ -40,11 +40,6 @@ spec:
       {{- end }}
       - name: emqx-data
         emptyDir: {}
-      {{- if .Values.emqx.emqxLicenseSecretName  }}
-      - name: emqx-license
-        secret:
-          secretName: {{ .Values.emqx.emqxLicenseSecretName }}
-      {{- end }}
     {{- if .Values.emqx.extraVolumes }}
       {{- toYaml .Values.emqx.extraVolumes | nindent 6 }}
     {{- end }}
