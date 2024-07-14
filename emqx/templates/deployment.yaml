@@ -8,8 +8,6 @@ metadata:
     app.kubernetes.io/name: emqx
     app.kubernetes.io/db_type: replicant
 spec:
-  updateStrategy:
-    type: RollingUpdate
   replicas: {{ .Values.emqx.replicantsCount }}
   selector:
     matchLabels:
