@@ -49,7 +49,7 @@ spec:
       {{- toYaml .Values.emqx.extraVolumes | nindent 6 }}
     {{- end }}
       {{- if .Values.emqx.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.emqx.podSecurityContext "enabled" | toYaml | nindent 10 }}
+      securityContext: {{- omit .Values.emqx.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       {{- if .Values.emqx.initContainers }}
       initContainers:
