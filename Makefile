@@ -24,7 +24,7 @@ test: ## Run Helm tests
 	@echo "Helm tests executed!"
 
 debug: ## Debug the Helm chart
-	@helm template $(HELM_RELEASE_NAME) $(HELM_CHART_PATH) -f $(HELM_CHART_PATH)/$(VALUES_FILE) --namespace $(NAMESPACE)
+	@helm template $(HELM_RELEASE_NAME) $(HELM_CHART_PATH) -f $(HELM_CHART_PATH)/$(VALUES_FILE) --namespace $(NAMESPACE) --debug
 	@echo "Helm chart templated for debugging!"
 
 clean: ## Delete the Helm release
