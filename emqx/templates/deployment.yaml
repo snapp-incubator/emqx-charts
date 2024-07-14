@@ -33,11 +33,6 @@ spec:
       {{- end }}
     spec:
       volumes:
-      {{- if .Values.emqx.ssl.enabled }}
-      - name: ssl-cert
-        secret:
-          secretName: {{ include "emqx.ssl.secretName" . }}
-      {{- end }}
       - name: emqx-data
         emptyDir: {}
     {{- if .Values.emqx.extraVolumes }}
