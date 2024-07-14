@@ -1,14 +1,18 @@
 ---
-serviceMonitor: {}
 emqx:
   ## Default values for emqx.
   ## This is a YAML-formatted file.
   ## Declare variables to be passed into your templates.
 
+  ## It is recommended to have odd number of nodes in a cluster, otherwise the emqx cluster cannot be automatically healed in case of net-split.
+  replicaCount: 3
+  replicantsCount: 3
+
   image:
-    # repository: emqx/emqx
-    # pullPolicy: IfNotPresent
-    pullPolicy: Always
+    repository: emqx/emqx
+    pullPolicy: IfNotPresent
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: "5.4.1"
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -37,11 +41,6 @@ emqx:
     # - name: mysql-probe
     #   image: alpine
     #   command: ["sh", "-c", "for i in $(seq 1 300); do nc -zvw1 mysql 3306 && exit 0 || sleep 3; done; exit 1"]
-  
-  # replicas is used for the number of core nodes
-  replicas: 3
-  # replicantsCount is used for the number of replicant nodes
-  replicantsCount: 3
 
   extraEnv:
     - name: HOME

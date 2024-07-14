@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: emqx-replicants-deployment
+  name: emqx-replicants
   labels:
     app: emqx
     app.kubernetes.io/instance: emqx-{{ .Release.Namespace }}
@@ -58,7 +58,7 @@ spec:
       {{- end }}
       containers:
         - name: emqx
-          image: "{{ .Values.emqx.image.repository }}:{{ .Values.emqx.image.tag | default .Chart.AppVersion }}"
+          image: {{ .Values.emqx.image.repository }}:{{ .Values.emqx.image.tag | default .Chart.AppVersion }}
           imagePullPolicy: {{ .Values.emqx.image.pullPolicy }}
           {{- if .Values.emqx.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.emqx.containerSecurityContext "enabled" | toYaml | nindent 12 }}
