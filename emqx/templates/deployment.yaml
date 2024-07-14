@@ -1,26 +1,31 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: emqx-replicants
+  name: {{ include "emqx.fullname" . }}-replicants
+  namespace: {{ .Release.Namespace }}
   labels:
     app: emqx
-    app.kubernetes.io/instance: emqx-{{ .Release.Namespace }}
-    app.kubernetes.io/name: emqx
+    app.kubernetes.io/name: {{ include "emqx.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
     app.kubernetes.io/db_type: replicant
+    helm.sh/chart: {{ include "emqx.chart" . }}
 spec:
   replicas: {{ .Values.emqx.replicantsCount }}
   selector:
     matchLabels:
       app: emqx
-      app.kubernetes.io/instance: emqx-{{ .Release.Namespace }}
-      app.kubernetes.io/name: emqx
+      app.kubernetes.io/name: {{ include "emqx.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+      app.kubernetes.io/managed-by: {{ .Release.Service }}
       app.kubernetes.io/db_type: replicant
   template:
     metadata:
       labels:
         app: emqx
-        app.kubernetes.io/instance: emqx-{{ .Release.Namespace }}
-        app.kubernetes.io/name: emqx
+        app.kubernetes.io/name: {{ include "emqx.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        app.kubernetes.io/managed-by: {{ .Release.Service }}
         app.kubernetes.io/db_type: replicant
       annotations:
       {{- with .Values.emqx.podAnnotations }}
@@ -65,13 +70,15 @@ spec:
           {{- end }}
           ports:
           - name: mqtt
-            containerPort: {{ splitList ":" ( .Values.emqx.emqxConfig.EMQX_LISTENERS__TCP__DEFAULT__BIND | default "1883" ) | last }}
+            containerPort: {{ .Values.emqxConfig.EMQX_LISTENERS__TCP__DEFAULT__BIND | default 1883 }}
           - name: mqttssl
-            containerPort: {{ splitList ":" ( .Values.emqx.emqxConfig.EMQX_LISTENERS__SSL__DEFAULT__BIND | default "8883" ) | last }}
+            containerPort: {{ .Values.emqxConfig.EMQX_LISTENERS__SSL__DEFAULT__BIND | default 8883 }}
           - name: ws
-            containerPort: {{ splitList ":" ( .Values.emqx.emqxConfig.EMQX_LISTENERS__WS__DEFAULT__BIND | default "8083" ) | last }}
+            containerPort: {{ .Values.emqxConfig.EMQX_LISTENERS__WS__DEFAULT__BIND | default 8083 }}
           - name: wss
-            containerPort: {{ splitList ":" ( .Values.emqx.emqxConfig.EMQX_LISTENERS__WSS__DEFAULT__BIND | default "8084" ) | last }}
+            containerPort: {{ .Values.emqxConfig.EMQX_LISTENERS__WSS__DEFAULT__BIND | default 8084 }}
+          - name: dashboard
+            containerPort: {{ .Values.emqxConfig.EMQX_DASHBOARD__LISTENERS__HTTP__BIND | default 18083 }}
           - name: ekka
             containerPort: 4370
           - name: genrpc-manual
@@ -106,20 +113,16 @@ spec:
           {{- toYaml .Values.emqx.extraVolumeMounts | nindent 10 }}
         {{- end }}
           readinessProbe:
-            exec:
-              command:
-                - /opt/emqx/bin/emqx
-                - ctl
-                - status
+            httpGet:
+              path: /status
+              port: {{ .Values.emqxConfig.EMQX_DASHBOARD__LISTENERS__HTTP__BIND | default 18083 }}
             initialDelaySeconds: 10
             periodSeconds: 5
             failureThreshold: 30
           livenessProbe:
-            exec:
-              command:
-                - /opt/emqx/bin/emqx
-                - ctl
-                - status
+            httpGet:
+              path: /status
+              port: {{ .Values.emqxConfig.EMQX_DASHBOARD__LISTENERS__HTTP__BIND | default 18083 }}
             initialDelaySeconds: 60
             periodSeconds: 30
             failureThreshold: 10
