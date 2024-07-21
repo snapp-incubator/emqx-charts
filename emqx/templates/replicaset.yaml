@@ -1,5 +1,5 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: ReplicaSet
 metadata:
   name: {{ include "emqx.fullname" . }}-replicants
   namespace: {{ .Release.Namespace }}
@@ -88,6 +88,9 @@ spec:
           envFrom:
           - configMapRef:
               name: {{ include "emqx.fullname" . }}-env
+          env:
+          - name: EMQX_NODE__ROLE
+            value: "replicant"
          {{- if .Values.emqx.envFromSecret }}
             - secretRef:
                 name: {{ .Values.emqx.envFromSecret }}
