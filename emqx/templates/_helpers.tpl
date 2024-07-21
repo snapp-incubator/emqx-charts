@@ -36,7 +36,7 @@ Create chart name and version as used by the chart label.
 Get ssl secret name .
 */}}
 {{- define "emqx.ssl.secretName" -}}
-{{- if and .Values.ssl.useExisting .Values.ssl.existingName -}}
+{{- if and .Values.emqx.ssl.useExisting .Values.emqx.ssl.existingName -}}
     {{ .Values.ssl.existingName }}
 {{- else -}}
     {{ include "emqx.fullname" . }}-tls
@@ -47,9 +47,9 @@ Get ssl secret name .
 Create the name of the service account to use
 */}}
 {{- define "emqx.serviceAccountName" -}}
-{{- if .Values.serviceAccount.create }}
-{{- default (include "emqx.fullname" .) .Values.serviceAccount.name }}
+{{- if .Values.emqx.serviceAccount.create }}
+{{- default (include "emqx.fullname" .) .Values.emqx.serviceAccount.name }}
 {{- else }}
-{{- default "default" .Values.serviceAccount.name }}
+{{- default "default" .Values.emqx.serviceAccount.name }}
 {{- end }}
 {{- end }}
