@@ -26,7 +26,7 @@ spec:
           {{- toYaml . | nindent 8 }}
       {{- end }}
     spec:
-      serviceAccountName: {{ include "emqx.serviceAccountName" . }}
+      serviceAccountName: {{ .Values.emqx.serviceAccount.name }}
       volumes:
       {{- if .Values.emqx.ssl.enabled }}
       - name: ssl-cert

@@ -42,14 +42,3 @@ Get ssl secret name .
     {{ include "emqx.fullname" . }}-tls
 {{- end -}}
 {{- end -}}
-
-{{/*
-Create the name of the service account to use
-*/}}
-{{- define "emqx.serviceAccountName" -}}
-{{- if .Values.emqx.serviceAccount.create }}
-{{- default (include "emqx.fullname" .) .Values.emqx.serviceAccount.name }}
-{{- else }}
-{{- default "default" .Values.emqx.serviceAccount.name }}
-{{- end }}
-{{- end }}
