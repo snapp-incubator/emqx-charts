@@ -88,9 +88,6 @@ spec:
           envFrom:
           - configMapRef:
               name: {{ include "emqx.fullname" . }}-env
-          env:
-          - name: EMQX_NODE__ROLE
-            value: "replicant"
          {{- if .Values.emqx.envFromSecret }}
             - secretRef:
                 name: {{ .Values.emqx.envFromSecret }}
