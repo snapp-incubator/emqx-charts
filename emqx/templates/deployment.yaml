@@ -86,7 +86,7 @@ spec:
             protocol: TCP
           envFrom:
           - configMapRef:
-            name: {{ include "emqx.fullname" . }}-env
+              name: {{ include "emqx.fullname" . }}-env
           env:
           - name: EMQX_NODE__ROLE
             value: "replicant"
