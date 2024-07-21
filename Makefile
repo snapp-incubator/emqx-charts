@@ -3,7 +3,7 @@
 # Variables
 HELM_RELEASE_NAME=emqx
 HELM_CHART_PATH=./emqx
-NAMESPACE=default
+NAMESPACE=emqx-staging
 VALUES_FILE=values.yaml
 
 .PHONY: help deploy test debug clean lint dry-run helm-dep-build
