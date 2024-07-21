@@ -4,12 +4,8 @@ metadata:
   name: {{ include "emqx.fullname" . }}-replicants
   namespace: {{ .Release.Namespace }}
   labels:
-    app: emqx
     app.kubernetes.io/name: {{ include "emqx.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
-    app.kubernetes.io/db_type: replicant
-    helm.sh/chart: {{ include "emqx.chart" . }}
 spec:
   replicas: {{ .Values.emqx.replicantsCount }}
   selector:
@@ -17,7 +13,6 @@ spec:
       app: emqx
       app.kubernetes.io/name: {{ include "emqx.name" . }}
       app.kubernetes.io/instance: {{ .Release.Name }}
-      app.kubernetes.io/managed-by: {{ .Release.Service }}
       app.kubernetes.io/db_type: replicant
   template:
     metadata:
@@ -25,7 +20,6 @@ spec:
         app: emqx
         app.kubernetes.io/name: {{ include "emqx.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
-        app.kubernetes.io/managed-by: {{ .Release.Service }}
         app.kubernetes.io/db_type: replicant
       annotations:
       {{- with .Values.emqx.podAnnotations }}
@@ -71,24 +65,31 @@ spec:
           ports:
           - name: mqtt
             containerPort: {{ .Values.emqx.emqxConfig.EMQX_LISTENERS__TCP__DEFAULT__BIND | default 1883 }}
+            protocol: TCP
           - name: mqttssl
             containerPort: {{ .Values.emqx.emqxConfig.EMQX_LISTENERS__SSL__DEFAULT__BIND | default 8883 }}
+            protocol: TCP
           - name: ws
             containerPort: {{ .Values.emqx.emqxConfig.EMQX_LISTENERS__WS__DEFAULT__BIND | default 8083 }}
+            protocol: TCP
           - name: wss
             containerPort: {{ .Values.emqx.emqxConfig.EMQX_LISTENERS__WSS__DEFAULT__BIND | default 8084 }}
+            protocol: TCP
           - name: dashboard
             containerPort: {{ .Values.emqx.emqxConfig.EMQX_DASHBOARD__LISTENERS__HTTP__BIND | default 18083 }}
+            protocol: TCP
           - name: ekka
             containerPort: 4370
+            protocol: TCP
           - name: genrpc-manual
             containerPort: 5369
+            protocol: TCP
+          envFrom:
+          - configMapRef:
+            name: {{ include "emqx.fullname" . }}-env
           env:
           - name: EMQX_NODE__ROLE
             value: "replicant"
-          envFrom:
-            - configMapRef:
-                name: {{ include "emqx.fullname" . }}-env
          {{- if .Values.emqx.envFromSecret }}
             - secretRef:
                 name: {{ .Values.emqx.envFromSecret }}
