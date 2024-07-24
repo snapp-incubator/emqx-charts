@@ -120,19 +120,18 @@ emqx:
     #       sysctl -w net.netfilter.nf_conntrack_max=1000000
     #       sysctl -w net.netfilter.nf_conntrack_tcp_timeout_time_wait=30
 
+  # secrets are used for replicants, it containers bootstrap-api-key and node-cookie
+  # which will be used to setup and connect replicants and cores
   secrets:
     bootstrap_api_key: "key"
     node_cookie: "cookie"
 
   ## EMQX configuration item, see the documentation (https://hub.docker.com/r/emqx/emqx)
   emqxConfig:
-    EMQX_CLUSTER__DISCOVERY_STRATEGY: k8s
-    EMQX_CLUSTER__DNS__NAME:  emqx-staging.svc.cluster.local
-    EMQX_CLUSTER__K8S__ADDRESS_TYPE: hostname
-    EMQX_CLUSTER__K8S__APISERVER: https://kubernetes.default.svc:443
-    EMQX_CLUSTER__K8S__NAMESPACE: '{{ .Release.Namespace }}'
-    EMQX_CLUSTER__K8S__SERVICE_NAME: '{{ .Release.Name }}-headless'
-    EMQX_CLUSTER__K8S__SUFFIX: svc.cluster.local
+    EMQX_DASHBOARD__LISTENERS__HTTP__BIND: 18083
+    EMQX_CLUSTER__DISCOVERY_STRATEGY: dns
+    EMQX_CLUSTER__DNS__NAME:  emqx-headless.emqx-staging.svc.cluster.local
+    EMQX_CLUSTER__DNS__RECORD_TYPE: svr
 
   ## EMQX Enterprise Edition requires manual creation of a Secret containing the licensed content. Write the name of Secret to the value of "emqxLicenseSecretName"
   ## Example:
