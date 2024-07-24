@@ -1,26 +1,25 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "emqx.fullname" . }}-replicants
+  name: {{ .Release.Name }}-replicants
   namespace: {{ .Release.Namespace }}
   labels:
-    app.kubernetes.io/name: {{ include "emqx.name" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
+    app: emqx
+    app.kubernetes.io/name: {{ .Release.Name }}
+    app.kubernetes.io/instance: {{ .Release.Name }}-replicants-deployment
 spec:
   replicas: {{ .Values.emqx.replicantsCount }}
   selector:
     matchLabels:
-      app: emqx
-      app.kubernetes.io/name: {{ include "emqx.name" . }}
-      app.kubernetes.io/instance: {{ .Release.Name }}
-      app.kubernetes.io/db_type: replicant
+      app.kubernetes.io/instance: {{ .Release.Name }}-replicants
+      app.kubernetes.io/name: {{ .Release.Name }}
+      app.kubernetes.io/db_role: replicant
   template:
     metadata:
       labels:
-        app: emqx
-        app.kubernetes.io/name: {{ include "emqx.name" . }}
-        app.kubernetes.io/instance: {{ .Release.Name }}
-        app.kubernetes.io/db_type: replicant
+        app.kubernetes.io/instance: {{ .Release.Name }}-replicants
+        app.kubernetes.io/name: {{ .Release.Name }}
+        app.kubernetes.io/db_role: replicant
       annotations:
       {{- with .Values.emqx.podAnnotations }}
           {{- toYaml . | nindent 8 }}
@@ -28,18 +27,8 @@ spec:
     spec:
       serviceAccountName: {{ .Values.emqx.serviceAccount.name }}
       volumes:
-      {{- if .Values.emqx.ssl.enabled }}
-      - name: ssl-cert
-        secret:
-          secretName: {{ include "emqx.ssl.secretName" . }}
-      {{- end }}
       - name: emqx-data
         emptyDir: {}
-      {{- if .Values.emqx.emqxLicenseSecretName  }}
-      - name: emqx-license
-        secret:
-          secretName: {{ .Values.emqx.emqxLicenseSecretName }}
-      {{- end }}
     {{- if .Values.emqx.extraVolumes }}
       {{- toYaml .Values.emqx.extraVolumes | nindent 6 }}
     {{- end }}
@@ -87,7 +76,7 @@ spec:
             protocol: TCP
           envFrom:
           - configMapRef:
-              name: {{ include "emqx.fullname" . }}-env
+              name: {{ .Release.Name }}-env
           env:
           - name: EMQX_NODE__ROLE
             value: "replicant"
@@ -100,17 +89,6 @@ spec:
           volumeMounts:
           - name: emqx-data
             mountPath: "/opt/emqx/data"
-          {{- if .Values.emqx.ssl.enabled }}
-          - name: ssl-cert
-            mountPath: /tmp/ssl
-            readOnly: true
-          {{- end}}
-          {{ if .Values.emqx.emqxLicenseSecretName }}
-          - name: emqx-license
-            mountPath: "/opt/emqx/etc/emqx.lic"
-            subPath: "emqx.lic"
-            readOnly: true
-          {{- end }}
         {{- if .Values.emqx.extraVolumeMounts }}
           {{- toYaml .Values.emqx.extraVolumeMounts | nindent 10 }}
         {{- end }}
@@ -148,8 +126,9 @@ spec:
           whenUnsatisfiable: {{ .whenUnsatisfiable }}
           labelSelector:
             matchLabels:
-              app.kubernetes.io/name: {{ include "emqx.name" $ }}
-              app.kubernetes.io/instance: {{ $.Release.Name }}
+              app.kubernetes.io/instance: {{ .Release.Name }}-replicants
+              app.kubernetes.io/name: {{ .Release.Name }}
+              app.kubernetes.io/db_role: replicant
         {{- if .minDomains }}
           minDomains: {{ .minDomains }}
         {{- end }}
