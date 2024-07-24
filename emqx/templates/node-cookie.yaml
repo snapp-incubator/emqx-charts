@@ -3,6 +3,6 @@ kind: Secret
 metadata:
   name: {{ .Release.Name }}-node-cookie
   namespace: {{ .Release.Namespace }}
-data:
+stringData:
   node_cookie: {{ .Values.emqx.secrets.node_cookie }}
 type: Opaque

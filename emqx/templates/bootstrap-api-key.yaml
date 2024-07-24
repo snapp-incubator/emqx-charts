@@ -3,6 +3,6 @@ kind: Secret
 metadata:
   name: {{ .Release.Name }}-bootstrap-api-key
   namespace: {{ .Release.Namespace }}
-data:
+stringData:
   bootstrap_api_key: {{ .Values.emqx.secrets.bootstrap_api_key }}
 type: Opaque
