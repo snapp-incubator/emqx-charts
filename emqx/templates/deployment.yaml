@@ -27,6 +27,10 @@ spec:
     spec:
       serviceAccountName: {{ .Values.emqx.serviceAccount.name }}
       volumes:
+      - name: bootstrap-api-key
+        secret:
+          defaultMode: 420
+          secretName: {{ .Release.Name }}-bootstrap-api-key
       - name: emqx-data
         emptyDir: {}
     {{- if .Values.emqx.extraVolumes }}
@@ -78,6 +82,15 @@ spec:
           - configMapRef:
               name: {{ .Release.Name }}-env
           env:
+          - name: EMQX_API_KEY__BOOTSTRAP_FILE
+            value: '"/opt/emqx/data/bootstrap_api_key"'
+          - name: EMQX_NODE__DATA_DIR
+            value: data
+          - name: EMQX_NODE__COOKIE
+            valueFrom:
+              secretKeyRef:
+                key: node_cookie
+                name: {{ .Release.Name }}-node-cookie
           - name: EMQX_NODE__ROLE
             value: "replicant"
          {{- if .Values.emqx.envFromSecret }}
@@ -89,6 +102,10 @@ spec:
           volumeMounts:
           - name: emqx-data
             mountPath: "/opt/emqx/data"
+          - name: bootstrap-api-key
+            mountPath: /opt/emqx/data/bootstrap_api_key
+            readOnly: true
+            subPath: bootstrap_api_key
         {{- if .Values.emqx.extraVolumeMounts }}
           {{- toYaml .Values.emqx.extraVolumeMounts | nindent 10 }}
         {{- end }}
