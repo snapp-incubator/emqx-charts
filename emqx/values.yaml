@@ -123,7 +123,7 @@ emqx:
   # secrets are used for replicants, it containers bootstrap-api-key
   # which will be used to setup replicants
   secrets:
-    bootstrap_api_key: "key"
+    bootstrap_api_key: "emqx-replicants-deployment:wuyowge9gsfsdrsvkywgcw5md9lcjzqzxzwtaf8zayljohgnp954mb5gfb6s5jzi"
 
   ## EMQX configuration item, see the documentation (https://hub.docker.com/r/emqx/emqx)
   emqxConfig:
