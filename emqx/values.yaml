@@ -131,7 +131,7 @@ emqx:
     EMQX_DASHBOARD__LISTENERS__HTTP__BIND: 18083
     EMQX_CLUSTER__DISCOVERY_STRATEGY: dns
     EMQX_CLUSTER__DNS__NAME:  emqx-headless.emqx-staging.svc.cluster.local
-    EMQX_CLUSTER__DNS__RECORD_TYPE: svr
+    EMQX_CLUSTER__DNS__RECORD_TYPE: srv
 
   ## EMQX Enterprise Edition requires manual creation of a Secret containing the licensed content. Write the name of Secret to the value of "emqxLicenseSecretName"
   ## Example:
