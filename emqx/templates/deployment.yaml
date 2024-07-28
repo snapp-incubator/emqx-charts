@@ -88,11 +88,6 @@ spec:
             value: '"/opt/emqx/data/bootstrap_api_key"'
           - name: EMQX_NODE__DATA_DIR
             value: data
-          - name: EMQX_NODE__COOKIE
-            valueFrom:
-              secretKeyRef:
-                key: node_cookie
-                name: {{ .Release.Name }}-node-cookie
           - name: EMQX_NODE__ROLE
             value: "replicant"
          {{- if .Values.emqx.envFromSecret }}

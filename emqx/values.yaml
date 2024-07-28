@@ -120,11 +120,10 @@ emqx:
     #       sysctl -w net.netfilter.nf_conntrack_max=1000000
     #       sysctl -w net.netfilter.nf_conntrack_tcp_timeout_time_wait=30
 
-  # secrets are used for replicants, it containers bootstrap-api-key and node-cookie
-  # which will be used to setup and connect replicants and cores
+  # secrets are used for replicants, it containers bootstrap-api-key
+  # which will be used to setup replicants
   secrets:
     bootstrap_api_key: "key"
-    node_cookie: "cookie"
 
   ## EMQX configuration item, see the documentation (https://hub.docker.com/r/emqx/emqx)
   emqxConfig:
