@@ -11,12 +11,14 @@ spec:
   replicas: {{ .Values.emqx.replicantsCount }}
   selector:
     matchLabels:
+      app: emqx
       app.kubernetes.io/instance: {{ .Release.Name }}-replicants
       app.kubernetes.io/name: {{ .Release.Name }}
       app.kubernetes.io/db_role: replicant
   template:
     metadata:
       labels:
+        app: emqx
         app.kubernetes.io/instance: {{ .Release.Name }}-replicants
         app.kubernetes.io/name: {{ .Release.Name }}
         app.kubernetes.io/db_role: replicant
