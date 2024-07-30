@@ -4,5 +4,5 @@ metadata:
   name: {{ .Release.Name }}-bootstrap-api-key
   namespace: {{ .Release.Namespace }}
 data:
-  bootstrap_api_key: {{ .Values.emqx.secrets.bootstrap_api_key | b64enc | quote }}
+  bootstrap_api_key: {{ printf "%s:%s" .Release.Name uuidv4 | b64enc | quote }}
 type: Opaque
